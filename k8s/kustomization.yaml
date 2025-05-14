@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1  # เวอร์ชันของ API ที่ใช้ (kustomize.config.k8s.io/v1beta1 เป็นเวอร์ชันมาตรฐานสำหรับ Kustomization)
+kind: Kustomization  # ประเภทของทรัพยากร (Kustomization ใช้รวมไฟล์ Kubernetes ทั้งหมดเข้าด้วยกัน)
+
+resources:  # รายการไฟล์ทรัพยากรที่จะรวมเข้าด้วยกัน
+  - deployment.yaml  # ไฟล์ Deployment ที่กำหนดวิธีการ deploy แอป
+  - service.yaml  # ไฟล์ Service ที่กำหนดการเข้าถึง Pod
+  - ingress.yaml  # ไฟล์ Ingress ที่กำหนดการจัดการ traffic จากภายนอก
+  - configmap.yaml  # ไฟล์ ConfigMap ที่กำหนดค่าคอนฟิกของแอป
+
+commonLabels:  # ป้ายกำกับที่จะเพิ่มให้กับทุกทรัพยากร
+  app: nuxt-app  # ป้ายกำกับ app เพื่อระบุว่าเป็นส่วนของแอป nuxt-app
+  environment: production  # ป้ายกำกับ environment เพื่อระบุว่าเป็น production environment

@@ -1,0 +1,11 @@
+apiVersion: v1  # เวอร์ชันของ API ที่ใช้ (v1 เป็นเวอร์ชันมาตรฐานสำหรับ ConfigMap)
+kind: ConfigMap  # ประเภทของทรัพยากร Kubernetes (ConfigMap ใช้เก็บค่าคอนฟิกที่ไม่ใช่ข้อมูลลับ)
+metadata:  # ข้อมูลเมตาดาต้าของ ConfigMap
+  name: nuxt-app-config  # ชื่อของ ConfigMap ใช้อ้างอิงใน Pod
+data:  # ข้อมูลที่จะเก็บใน ConfigMap
+  NODE_ENV: "production"  # กำหนดสภาพแวดล้อมเป็น production
+  API_BASE_URL: "https://api.example.com"  # URL ของ API ที่แอปจะเชื่อมต่อด้วย (เปลี่ยนเป็น URL ของ API ที่คุณใช้)
+  # เพิ่มค่าคอนฟิกอื่นๆ ที่ต้องการตรงนี้
+  # ตัวอย่างเช่น:
+  # APP_TITLE: "HR Management System"
+  # FEATURE_FLAGS: "{\"enableNewUI\": true, \"enableNotifications\": true}"

@@ -1,0 +1,31 @@
+apiVersion: v1  # เวอร์ชันของ API ที่ใช้ (v1 เป็นเวอร์ชันมาตรฐานสำหรับ Service)
+kind: Service  # ประเภทของทรัพยากร Kubernetes (Service ใช้เพื่อเปิดให้เข้าถึง Pod ได้)
+metadata:  # ข้อมูลเมตาดาต้าของ Service
+  name: nuxt-app-service  # ชื่อของ Service ใช้อ้างอิงใน kubectl, dashboard และ Ingress
+  labels:  # ป้ายกำกับสำหรับการค้นหาและจัดกลุ่ม
+    app: nuxt-app  # ป้ายกำกับ app เพื่อระบุว่าเป็นส่วนของแอป nuxt-app
+spec:  # รายละเอียดของ Service
+  type: ClusterIP  # ประเภทของ Service (ClusterIP = ใช้ภายใน cluster เท่านั้น)
+  ports:  # การกำหนดพอร์ต
+  - port: 80  # พอร์ตที่เปิดให้บริการภายใน cluster (ใช้พอร์ต 80 เพื่อความสะดวก)
+    targetPort: 3000  # พอร์ตของ Pod ที่ต้องการส่ง traffic ไปหา (ตรงกับ containerPort ใน deployment)
+    protocol: TCP  # โปรโตคอลที่ใช้
+    name: http  # ชื่อของพอร์ต (ใช้อ้างอิงใน Ingress)
+  selector:  # ตัวเลือกที่ใช้ระบุว่า Pod ไหนที่ Service นี้จะส่ง traffic ไปให้
+    app: nuxt-app  # เลือก Pod ที่มีป้ายกำกับ app=nuxt-app (ต้องตรงกับ labels ใน Pod)
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nuxt-app-nodeport
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+    nodePort: 31008
+  selector:
+    app: nuxt-app

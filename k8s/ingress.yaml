@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1  # เวอร์ชันของ API ที่ใช้ (networking.k8s.io/v1 เป็นเวอร์ชันมาตรฐานสำหรับ Ingress)
+kind: Ingress  # ประเภทของทรัพยากร Kubernetes (Ingress ใช้จัดการ HTTP traffic จากภายนอก)
+metadata:  # ข้อมูลเมตาดาต้าของ Ingress
+  name: nuxt-app-ingress  # ชื่อของ Ingress ใช้อ้างอิงใน kubectl และ dashboard
+  annotations:  # การกำหนดค่าพิเศษสำหรับ Ingress Controller
+    nginx.ingress.kubernetes.io/rewrite-target: /  # เปลี่ยน path ที่เข้ามาเป็น / ก่อนส่งไปยัง service
+    # ถ้าใช้ Cloudflare ควรเพิ่ม annotation นี้
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"  # บังคับให้ใช้ HTTPS เท่านั้น
+spec:  # รายละเอียดของ Ingress
+  ingressClassName: nginx  # ระบุ IngressClass ที่จะใช้ (ต้องตรงกับ Ingress Controller ที่ติดตั้ง)
+  rules:  # กฎการจัดการ traffic
+  - host: nuxt-app.localhost  # ใช้ .localhost สำหรับทดสอบบนเครื่องท้องถิ่น
+    http:  # การจัดการ HTTP traffic
+      paths:  # การกำหนด path ที่จะจัดการ
+      - path: /  # path ที่จะจัดการ (ในที่นี้คือ root path /)
+        pathType: Prefix  # ประเภทของ path (Prefix = จับทุก path ที่ขึ้นต้นด้วย /)
+        backend:  # บริการที่จะส่ง traffic ไปให้
+          service:  # กำหนด service ที่จะส่ง traffic ไปให้
+            name: nuxt-app-service  # ชื่อของ service (ต้องตรงกับชื่อในไฟล์ service.yaml)
+            port:  # พอร์ตที่จะส่ง traffic ไป
+              number: 80  # หมายเลขพอร์ต (ต้องตรงกับ port ในไฟล์ service.yaml)
